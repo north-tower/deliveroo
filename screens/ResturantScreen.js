@@ -1,7 +1,7 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View, ScrollView } from 'react-native'
 import React from 'react'
 import { useNavigation, useRoute } from '@react-navigation/native'
-import { ScrollView } from 'react-native-gesture-handler'
+// import { ScrollView } from 'react-native-gesture-handler'
 import tw from "tailwind-react-native-classnames"
 import { ArrowLeftIcon, ChevronRightIcon, MapPinIcon, QuestionMarkCircleIcon, StarIcon } from 'react-native-heroicons/solid'
 import DishRow from '../components/DishRow'
@@ -15,7 +15,6 @@ const ResturantScreen = () => {
     } = useRoute()
 
   return (
-    <View>
     <ScrollView>
         <View style={tw`relative`}>
             <Image 
@@ -28,7 +27,7 @@ const ResturantScreen = () => {
         </View>
         <View style={tw`bg-white`}>
             <View style={tw`px-4 pt-4`}>
-                <Text style={tw`text-3xl font-bold`}>{title}</Text>
+                <Text style={tw`text-3xl text-black font-bold`}>{title}</Text>
                 <View style={tw`flex-row p-2 my-1`}>
                     <View style={tw`flex-row items-center p-1`}>
                         <StarIcon color="green" opacity={0.5} size={22} />
@@ -51,7 +50,7 @@ const ResturantScreen = () => {
             <TouchableOpacity style={tw`flex-row items-center p-4 
             border-gray-300`}>
                 <QuestionMarkCircleIcon color="gray" opacity={0.3} size={20} />
-                <Text style={tw`pl-2 flex-1 text-xs font-bold`}>
+                <Text style={tw`pl-2 flex-1 text-gray-300 text-xs font-bold`}>
                     Have a food allergy?
                 </Text>
                 <ChevronRightIcon color="#00CCBB"/>
@@ -59,23 +58,22 @@ const ResturantScreen = () => {
         </View>
 
         <View>
-            <Text style={tw`px-4 pt-6 mb-3 font-bold text-xl`}>
+            <Text style={tw`px-4 pt-6 mb-3 text-black font-bold text-xl`}>
                 Menu
             </Text>
 
             {dishes.map(dish=>
             (
                 <DishRow 
-                key={dish._id}
-                id={dish._id}
-                name={dish}
+                key={dish.name}
+                id={dish.name}
+                name={dish.name}
                 description={short_description}
                 price={dish.price}
                 image={dish.image} />
             ))}
         </View>
     </ScrollView>
-    </View>
   )
 }
 
