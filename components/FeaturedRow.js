@@ -21,7 +21,7 @@ const FeaturedRow = ({id, title, description }) => {
         <ResturantCard
   id={13}
   imgUrl="https://images.unsplash.com/photo-1611143669185-af224c5e3252?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Nnx8c3VzaGl8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60"
-  title="Sushi"
+  title="Amor"
   rating={4.5}
   genre="Japanese"
   address="Main Str"
