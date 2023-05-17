@@ -84,7 +84,7 @@ const ResturantScreen = () => {
                 (
                     <DishRow 
                     key={dish.name}
-                    id={dish.name}
+                    id={dish.id}
                     name={dish.name}
                     description={short_description}
                     price={dish.price}

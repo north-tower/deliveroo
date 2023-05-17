@@ -1,9 +1,9 @@
-import { StyleSheet, Text, View , SafeAreaView, TouchableOpacity, Image} from 'react-native'
-import React, {useState, useMemo } from 'react'
+import { StyleSheet, Text, View , SafeAreaView, TouchableOpacity, Image, ScrollView} from 'react-native'
+import React, {useState, useMemo, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { selectResturant } from '../features/resturantSlice';
 import { useNavigation } from "@react-navigation/native"
-import { selectBasketItems } from '../features/basketSlice';
+import { removeFromBasket, selectBasketItems, selectBasketTotal } from '../features/basketSlice';
 import { XCircleIcon } from 'react-native-heroicons/solid';
 import tw from "tailwind-react-native-classnames"
 
@@ -11,17 +11,20 @@ const BasketScreen = () => {
   const navigation = useNavigation();
   const resturant = useSelector(selectResturant);
   const items = useSelector(selectBasketItems);
-  const dispatch = useDispatch;
+  const dispatch = useDispatch();
+  const basketTotal = useSelector(selectBasketTotal);
   const [ groupedItemsInBasket, setGroupedItemsInBasket ]  = useState([]);
 
-  useMemo(() => {
+  useEffect(() => {
     const groupedItems = items.reduce((results, item) => {
-      (results[items.id] = results[items.id] || []).push(item);
+      (results[item.id] = results[item.id] || []).push(item);
       return results;
     }, {});
 
     setGroupedItemsInBasket(groupedItems);
   }, [items]);
+
+  
 
   
 
@@ -49,6 +52,56 @@ const BasketScreen = () => {
             <Text style={tw`text-black`}>Change</Text>
           </TouchableOpacity>
         </View>
+
+        <ScrollView style={tw`bg-white`}>
+  {Object.entries(groupedItemsInBasket).map(([key, items], index) => (
+    <View
+      key={key}
+      style={[
+        tw`flex-row items-center bg-white py-2 px-5`,
+        index !== 0 && tw`border-t border-gray-200`,
+      ]}
+    >
+              <Text style={tw`text-green-300 mr-2`}>{items.length} x</Text>
+              <Image source={{ uri: items[0]?.image }}
+              style={tw`h-12 w-12 rounded-full`} />
+              <Text style={tw`flex-1`}>{items[0]?.name}</Text>
+              <Text style={tw`text-gray-600 mr-2`}>
+                ${items[0]?.price} 
+              </Text>
+              <TouchableOpacity>
+                <Text style={tw`text-green-400 text-xs`} 
+                onPress={() => dispatch(removeFromBasket({ id: key }))} >
+                  Remove
+                </Text>
+              </TouchableOpacity>
+
+            </View>
+          ))}
+        </ScrollView>
+
+        <View style={tw`p-5 bg-white mt-5 `}>
+          <View style={tw`flex-row justify-between mt-2`}>
+            <Text style={tw`text-gray-400 ml-2`}>Subtotal</Text>
+            <Text style={tw`text-gray-400 ml-2`}>${basketTotal}</Text>
+          </View>
+        
+        
+          <View style={tw`flex-row justify-between mt-2`}>
+            <Text style={tw`text-gray-400 ml-2`}>Service Charges</Text>
+            <Text style={tw`text-gray-400 ml-2`}>$5.99</Text>
+          </View>
+        
+        
+          <View style={tw`flex-row justify-between mt-2 mb-2`}>
+            <Text style={tw`text-black ml-2`}>Order Total</Text>
+            <Text style={tw`font-extrabold text-black ml-2`}>${basketTotal + 5.99}</Text>
+          </View>
+          <TouchableOpacity onPress={() => navigation.navigate("PreparingOrderScreen")} style={[tw`rounded-lg p-4`,  { backgroundColor: '#00CCBB' }]}>
+            <Text style={tw`text-center text-white text-lg font-bold`}>Place Order</Text>
+          </TouchableOpacity>
+        
+      </View>
       </View>
     </SafeAreaView>
   )
