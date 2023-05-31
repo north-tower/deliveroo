@@ -16,9 +16,6 @@ import FeaturedRow3 from '../components/FeaturedRow3';
 
 
 const HomeScreen = () => {
-
-    
-
     const navigation = useNavigation();
     const [ featuredCategories, setFeaturedCategories ] = useState([]);
     const [data, setData] = useState(null);
